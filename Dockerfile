@@ -1,9 +1,9 @@
-FROM alpine:3.11 as builder
+FROM alpine:3.12 as builder
 ENV TZ Asia/Shanghai
 ENV LC_ALL=zh_CN.UTF-8
 
-RUN echo "https://mirrors.aliyun.com/alpine/v3.11/main/" > /etc/apk/repositories && \
-    echo "https://mirrors.aliyun.com/alpine/v3.11/community/" >> /etc/apk/repositories && \
+RUN echo "https://mirrors.aliyun.com/alpine/v3.12/main/" > /etc/apk/repositories && \
+    echo "https://mirrors.aliyun.com/alpine/v3.12/community/" >> /etc/apk/repositories && \
     apk update && \
     apk add --no-cache bash && \
     apk add --no-cache py3-pip python3 python3-dev && \
@@ -25,12 +25,12 @@ RUN cd /data/XueQG && \
     pip3 install -r requirements.txt && \
     pyinstaller -F XueQG.py
 
-FROM alpine:3.11
+FROM alpine:3.12
 ENV TZ Asia/Shanghai
 ENV LC_ALL=zh_CN.UTF-8  
 
-RUN echo "https://mirrors.aliyun.com/alpine/v3.11/main/" > /etc/apk/repositories && \
-    echo "https://mirrors.aliyun.com/alpine/v3.11/community/" >> /etc/apk/repositories && \
+RUN echo "https://mirrors.aliyun.com/alpine/v3.12/main/" > /etc/apk/repositories && \
+    echo "https://mirrors.aliyun.com/alpine/v3.12/community/" >> /etc/apk/repositories && \
     apk update && \
     apk add --no-cache tzdata && cp /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone && \
     apk add --no-cache ttf-dejavu fontconfig && mkfontscale && mkfontdir && fc-cache && \    

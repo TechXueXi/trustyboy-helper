@@ -1,8 +1,10 @@
-FROM alpine:latest as builder
+FROM alpine:3.11 as builder
 ENV TZ Asia/Shanghai
 ENV LC_ALL=zh_CN.UTF-8
 
-RUN apk update && \
+RUN echo "https://mirrors.aliyun.com/alpine/v3.11/main/" > /etc/apk/repositories && \
+    echo "https://mirrors.aliyun.com/alpine/v3.11/community/" >> /etc/apk/repositories && \
+    apk update && \
     apk add --no-cache bash && \
     apk add --no-cache py3-pip python3 python3-dev && \
     apk add --no-cache libxml2-dev libxslt-dev libffi-dev gcc musl-dev libgcc openssl-dev curl && \
@@ -20,16 +22,18 @@ COPY requirements.txt /data/XueQG/requirements.txt
 ENV LIBRARY_PATH=/lib:/usr/lib
 
 RUN cd /data/XueQG && \
-    pip install -r requirements.txt && \
+    pip3 install -r requirements.txt && \
     pyinstaller -F XueQG.py
 
-FROM alpine:latest
+FROM alpine:3.11
 ENV TZ Asia/Shanghai
 ENV LC_ALL=zh_CN.UTF-8  
 
-RUN apk update && \
+RUN echo "https://mirrors.aliyun.com/alpine/v3.11/main/" > /etc/apk/repositories && \
+    echo "https://mirrors.aliyun.com/alpine/v3.11/community/" >> /etc/apk/repositories && \
+    apk update && \
     apk add --no-cache tzdata && cp /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone && \
-    apk add --no-cache ttf-dejavu fontconfig && mkfontscale && mkfontdir && fc-cache && \
+    apk add --no-cache ttf-dejavu fontconfig && mkfontscale && mkfontdir && fc-cache && \    
     apk add --no-cache zbar && \
     apk add --no-cache chromium && \
     apk add --no-cache chromium-chromedriver && \

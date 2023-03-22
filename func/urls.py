@@ -2,7 +2,7 @@ user_Info_url = "https://pc-api.xuexi.cn/open/api/user/info"
 user_totalScore_url = "https://pc-proxy-api.xuexi.cn/delegate/score/get"
 user_todayTotalScore_url = "https://pc-proxy-api.xuexi.cn/delegate/score/today/query"
 # user_rateScore_url = "https://pc-api.xuexi.cn/open/api/score/today/queryrate"
-user_rateScore_url = "https://pc-proxy-api.xuexi.cn/api/score/days/listScoreProgress?sence=score&deviceType=2"
+user_rateScore_url = "https://pc-proxy-api.xuexi.cn/delegate/score/days/listScoreProgress?sence=score&deviceType=2"
 
 article_url_list = ["https://www.xuexi.cn/lgdata/35il6fpn0ohq.json",
                     "https://www.xuexi.cn/lgdata/45a3hac2bf1j.json",

@@ -169,7 +169,8 @@ def respond(model, cookies, scores):
                     respond_drv.radio_check(radio_out_tips)
                     # return respond_drv._search(content, options, excludes)
                 else:
-                    print('无法根据提示判断，正在继续答题……')
+                    print('多选题无法根据提示判断，自动选择 A选项')
+                    respond_drv.radio_check("A")
                 
                 try_count += 1    
             elif "单选题" in category:

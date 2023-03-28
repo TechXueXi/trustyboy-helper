@@ -18,7 +18,7 @@ def up_info():
     __INFO = "By Kenf, Alex"
     try:
         update_log = requests.get(
-            "https://www.fzwise.com/xxqg-helper/Update.html").content.decode("utf8")
+            "https://ghproxy.com/https://github.com/trustyboy/xxqg-helper/blob/master/Config/Update.html", timeout = 5).content.decode("utf8")
         update_log = update_log.split("\n")
         print(color.yellow("[*] " + __INFO))
         print(color.yellow("[*] 程序版本为：{}".format(__Version)))
@@ -33,6 +33,7 @@ def up_info():
             print(color.red("[*] 更新提要："))
             for i in update_log[4:]:
                 print(color.red("[*] " + i))
+            sendMessage("检测到当前不是最新版本，此版本仍在支持列表，但即将失效")
         elif __Version not in canuse_version and compare_version(__Version , update_version) < 0:
             print(color.red("[*] 检测到当前版本已不再支持，请更新后再运行"))
             print(color.red("[*] " * 15))

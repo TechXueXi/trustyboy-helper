@@ -5,10 +5,10 @@ ENV LC_ALL=zh_CN.UTF-8
 RUN echo "https://mirrors.aliyun.com/alpine/v3.12/main/" > /etc/apk/repositories && \
     echo "https://mirrors.aliyun.com/alpine/v3.12/community/" >> /etc/apk/repositories && \
     apk update && \
-    apk add --no-cache bash && \
-    apk add --no-cache py3-pip python3 python3-dev && \
-    apk add --no-cache libxml2-dev libxslt-dev libffi-dev gcc musl-dev libgcc openssl-dev curl && \
-    apk add --no-cache jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev && \   
+    apk add  bash && \
+    apk add  py3-pip python3 python3-dev && \
+    apk add  libxml2-dev libxslt-dev libffi-dev gcc musl-dev libgcc openssl-dev curl && \
+    apk add  jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev && \   
     rm -rf /var/cache/apk/* && \
     mkdir -p /data/XueQG/Config 
     
@@ -32,12 +32,12 @@ ENV LC_ALL=zh_CN.UTF-8
 RUN echo "https://mirrors.aliyun.com/alpine/v3.12/main/" > /etc/apk/repositories && \
     echo "https://mirrors.aliyun.com/alpine/v3.12/community/" >> /etc/apk/repositories && \
     apk update && \
-    apk add --no-cache tzdata && cp /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone && \
-    apk add --no-cache ttf-dejavu fontconfig && mkfontscale && mkfontdir && fc-cache && \    
-    apk add --no-cache zbar && \
-    apk add --no-cache chromium && \
-    apk add --no-cache chromium-chromedriver && \
-    sed -i "s/\$cdc_/\$abc_/" /usr/lib/chromium/chromedriver && \
+    apk add  tzdata && cp /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone && \
+    apk add  ttf-dejavu fontconfig && mkfontscale && mkfontdir && fc-cache && \    
+    apk add  zbar && \
+    apk add  chromium && \
+    apk add  chromium-chromedriver && \
+    sed -i "s/\$cdc_asdjflasutopfhvcZLmcfl_/\$aaa_aaaaaaaaaaaaaaaaaaaaaa_/" /usr/lib/chromium/chromedriver && \
     rm -rf /var/cache/apk/* && \
     mkdir -p /data/XueQG/Config && \
     cd /data/XueQG

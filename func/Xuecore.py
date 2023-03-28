@@ -253,71 +253,52 @@ class XCore:
         self.driver.find_element_by_xpath(xpath).click()
 
     # 实验功能，检测是否有验证滑块等，用于检测是否被网站反检测到脚本
-    def check_huakuai(self):
-        try:
-            self.driver.find_element_by_css_selector(".nc_iconfont.btn_slide")
-            time.sleep(1)
-            return "check_hk"
-        except:
-            pass
+    def check_swiper(self):
+        if self.driver.find_elements_by_class_name("nc-mask-display"):
+            print("出现滑块验证。")
+            time.sleep(3)
+            self.swiper_valid()
+            time.sleep(3)
+            if self.driver.find_elements_by_class_name("nc-mask-display"):
+                print("滑块解锁失败。")
+                raise Exception("滑块解锁失败。")
+            else:
+                print("滑块解锁成功")
 
-        try:
-            self.driver.find_element_by_xpath(
-                '//*[@id="swiper_valid"]/div/span/a[1]')
-            time.sleep(1)
-            return "check_hk_reset"
-        except:
-            pass
-        return "no"
+    def swiper_valid(self):
+        builder = ActionChains(self.driver)
+        builder.reset_actions()
+        track = self.move_mouse(300)
+        btnSlide = self.driver.find_element_by_class_name("btn_slide")
+        if not btnSlide:
+            return
+        builder.move_to_element(btnSlide)
+        builder.click_and_hold()
+        time.sleep(0.2)
+        for i in track:
+            builder.move_by_offset(xoffset=i, yoffset=0)
+            builder.reset_actions()
+        time.sleep(0.1)
+        # 释放左键，执行for中的操作
+        builder.release().perform()
+        time.sleep(5)
+        self.swiper_valid()
 
-    def move_huakuai(self):
-        # 实验功能，临时处理
-        hk_num = check_hk_num = check_hk_reset_num = 1
-        while hk_num < 5:
-            check_hk = self.check_huakuai()
-            if check_hk == "no":
+    # 鼠标移动
+    def move_mouse(self, distance):
+        remaining_dist = distance
+        moves = []
+        a = 0
+        # 加速度，速度越来越快...
+        while remaining_dist > 0:
+            span = random.randint(15, 20)
+            a += span
+            moves.append(a)
+            remaining_dist -= span
+            if sum(moves[:-1]) > 300:
+                print(sum(moves))
                 break
-            if check_hk == "check_hk":
-                print("DEBUG-1016: 检测到滑块验证，正在尝试解锁 " + str(hk_num) + "次")
-                try:
-                    try:
-                        hk_button = self.driver.find_element_by_xpath(
-                            '//*[@id="nc_1_n1z"]')
-                    except:
-                        try:
-                            hk_button = self.driver.find_element_by_xpath(
-                                '//*[@id="nc_3_n1z"]')
-                        except:
-                            hk_num += 1
-                            continue
-                    hk_action = ActionChains(self.driver)
-                    hk_action.click_and_hold(hk_button).perform()
-                    time.sleep(1)
-                    hk_action.move_by_offset(265, 0).perform()
-                    hk_action.release().perform()
-                    # hk_action.perform()
-                    time.sleep(5)
-                    hk_num += 1
-                    check_hk_num += 1
-                    continue
-                except:
-                    pass
-            if check_hk == "check_hk_reset":
-                # 尝试定位滑块是否刷新状态
-                try:
-                    hk_button_reset = self.driver.find_element_by_xpath(
-                        '//*[@id="swiper_valid"]/div/span/a[1]')
-                    print("DEBUG-1017: 解锁滑块失败正在刷新重试  " + str(hk_num) + "次")
-                    hk_button_reset.click()
-                    time.sleep(2)
-                    continue
-                except:
-                    pass
-            hk_num += 1
-
-        if check_hk_num > check_hk_reset_num:
-            print("已完成滑块解锁")
-        return hk_num
+        return moves
 
     def get_tips(self, mode=1, answer_num=None):
         content = ""
@@ -393,7 +374,7 @@ class XCore:
         self.check_next_botton()
         # 检测验证滑块，一般只有检测到 Webdriver标识才会出现
         # 实验功能，用于调试
-        check_hk = self.move_huakuai()
+        self.check_swiper()
 
     def fill_in_blank(self, answer, movie=False):
         check_blank_num = 0
@@ -423,7 +404,7 @@ class XCore:
         self.check_next_botton()
         # 检测验证滑块，一般只有检测到 Webdriver标识才会出现
         # 实验功能，用于调试
-        check_hk = self.move_huakuai()
+        self.check_swiper()
 
     def format_answer(self, answer):
         answer = re.sub(r'<input[^<]*>', '______', answer)

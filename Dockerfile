@@ -22,7 +22,7 @@ COPY requirements.txt /data/XueQG/requirements.txt
 ENV LIBRARY_PATH=/lib:/usr/lib
 
 RUN cd /data/XueQG && \
-    pip3 install -r requirements.txt && \
+    pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt && \
     pyinstaller -F XueQG.py
 
 FROM alpine:3.12

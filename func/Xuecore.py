@@ -254,35 +254,45 @@ class XCore:
 
     # 实验功能，检测是否有验证滑块等，用于检测是否被网站反检测到脚本
     def check_swiper(self):
-        if self.driver.find_elements_by_class_name("nc-mask-display"):
-            print("出现滑块验证。")
-            time.sleep(3)
-            self.swiper_valid()
-            time.sleep(3)
+        tryTimes = 0
+        while tryTimes < 5:
+            tryTimes += 1
             if self.driver.find_elements_by_class_name("nc-mask-display"):
-                print("滑块解锁失败。")
-                raise Exception("滑块解锁失败。")
+                print("出现滑块验证。")
+                time.sleep(1)
+                self.swiper_valid()
+                time.sleep(5)
+                if self.driver.find_elements_by_class_name("nc-mask-display"):
+                    print("滑块解锁失败，进行重试。")
+                    continue
+                else:
+                    print("滑块解锁成功")
+                    break
             else:
-                print("滑块解锁成功")
+                break
+        if tryTimes >= 5:
+            print("滑块解锁失败")
+            raise Exception("滑块解锁失败")
 
     def swiper_valid(self):
-        builder = ActionChains(self.driver)
-        builder.reset_actions()
-        track = self.move_mouse(300)
-        btnSlide = self.driver.find_element_by_class_name("btn_slide")
-        if not btnSlide:
-            return
-        builder.move_to_element(btnSlide)
-        builder.click_and_hold()
-        time.sleep(0.2)
-        for i in track:
-            builder.move_by_offset(xoffset=i, yoffset=0)
+        try:
+            builder = ActionChains(self.driver)
             builder.reset_actions()
-        time.sleep(0.1)
-        # 释放左键，执行for中的操作
-        builder.release().perform()
-        time.sleep(5)
-        self.swiper_valid()
+            track = self.move_mouse(300)
+            btnSlide = self.driver.find_element_by_class_name("btn_slide")
+            builder.move_to_element(btnSlide)
+            builder.click_and_hold()
+            time.sleep(0.2)
+            for i in track:
+                builder.move_by_offset(xoffset=i, yoffset=0)
+                builder.reset_actions()
+            time.sleep(1)
+            # 释放左键，执行for中的操作
+            builder.release().perform()
+            time.sleep(5)
+            self.swiper_valid()
+        except Exception as e:
+            pass
 
     # 鼠标移动
     def move_mouse(self, distance):
